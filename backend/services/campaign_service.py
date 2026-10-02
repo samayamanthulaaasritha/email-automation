@@ -5,10 +5,16 @@ import threading
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 
-from services.sender_service import get_sender_by_id
-from services.excel_service import parse_excel_file
-from services.email_service import send_campaign_emails, substitute_placeholders
-from services.report_service import generate_campaign_excel_report
+try:
+    from services.sender_service import get_sender_by_id
+    from services.excel_service import parse_excel_file
+    from services.email_service import send_campaign_emails, substitute_placeholders
+    from services.report_service import generate_campaign_excel_report
+except ImportError:
+    from backend.services.sender_service import get_sender_by_id
+    from backend.services.excel_service import parse_excel_file
+    from backend.services.email_service import send_campaign_emails, substitute_placeholders
+    from backend.services.report_service import generate_campaign_excel_report
 
 DEFAULT_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
 DEFAULT_UPLOADS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'uploads')

@@ -6,9 +6,14 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-from routes.health_routes import health_bp
-from routes.sender_routes import sender_bp
-from routes.campaign_routes import campaign_bp
+try:
+    from routes.health_routes import health_bp
+    from routes.sender_routes import sender_bp
+    from routes.campaign_routes import campaign_bp
+except ImportError:
+    from backend.routes.health_routes import health_bp
+    from backend.routes.sender_routes import sender_bp
+    from backend.routes.campaign_routes import campaign_bp
 
 def create_app():
     app = Flask(__name__)

@@ -1,19 +1,34 @@
 import os
 from flask import Blueprint, request, jsonify, send_file
 from werkzeug.utils import secure_filename
-from services.campaign_service import (
-    get_all_campaigns,
-    get_campaign_by_id,
-    create_campaign,
-    attach_excel_to_campaign,
-    remap_campaign_columns,
-    update_campaign_email_content,
-    get_email_preview,
-    execute_campaign_send,
-    get_campaign_progress,
-    delete_campaign
-)
-from services.report_service import generate_campaign_excel_report
+try:
+    from services.campaign_service import (
+        get_all_campaigns,
+        get_campaign_by_id,
+        create_campaign,
+        attach_excel_to_campaign,
+        remap_campaign_columns,
+        update_campaign_email_content,
+        get_email_preview,
+        execute_campaign_send,
+        get_campaign_progress,
+        delete_campaign
+    )
+    from services.report_service import generate_campaign_excel_report
+except ImportError:
+    from backend.services.campaign_service import (
+        get_all_campaigns,
+        get_campaign_by_id,
+        create_campaign,
+        attach_excel_to_campaign,
+        remap_campaign_columns,
+        update_campaign_email_content,
+        get_email_preview,
+        execute_campaign_send,
+        get_campaign_progress,
+        delete_campaign
+    )
+    from backend.services.report_service import generate_campaign_excel_report
 
 campaign_bp = Blueprint('campaigns', __name__)
 

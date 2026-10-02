@@ -1,11 +1,20 @@
 from flask import Blueprint, request, jsonify
-from services.sender_service import (
-    get_all_senders,
-    add_sender,
-    delete_sender,
-    test_gmail_credentials
-)
-from utils.validation import is_valid_email
+try:
+    from services.sender_service import (
+        get_all_senders,
+        add_sender,
+        delete_sender,
+        test_gmail_credentials
+    )
+    from utils.validation import is_valid_email
+except ImportError:
+    from backend.services.sender_service import (
+        get_all_senders,
+        add_sender,
+        delete_sender,
+        test_gmail_credentials
+    )
+    from backend.utils.validation import is_valid_email
 
 sender_bp = Blueprint('senders', __name__)
 
