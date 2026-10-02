@@ -1,0 +1,34 @@
+# Environments & Secrets
+.env
+.env.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+uploads/
+backend/uploads/
+data/
+backend/data/
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# System & IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
+Desktop.ini
+.DS_Store
