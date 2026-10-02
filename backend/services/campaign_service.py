@@ -10,9 +10,20 @@ from services.excel_service import parse_excel_file
 from services.email_service import send_campaign_emails, substitute_placeholders
 from services.report_service import generate_campaign_excel_report
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+DEFAULT_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+DEFAULT_UPLOADS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'uploads')
+is_vercel = bool(os.environ.get('VERCEL') or os.environ.get('AWS_LAMBDA_FUNCTION_NAME'))
+
+if is_vercel:
+    import tempfile
+    import shutil
+    DATA_DIR = os.path.join(tempfile.gettempdir(), 'email_automation_data')
+    UPLOADS_DIR = os.path.join(tempfile.gettempdir(), 'email_automation_uploads')
+else:
+    DATA_DIR = DEFAULT_DATA_DIR
+    UPLOADS_DIR = DEFAULT_UPLOADS_DIR
+
 CAMPAIGNS_FILE = os.path.join(DATA_DIR, 'campaigns.json')
-UPLOADS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'uploads')
 
 # In-memory progress tracking for live status
 campaign_progress_tracker: Dict[str, Dict[str, Any]] = {}
@@ -21,8 +32,17 @@ def ensure_dirs():
     os.makedirs(DATA_DIR, exist_ok=True)
     os.makedirs(UPLOADS_DIR, exist_ok=True)
     if not os.path.exists(CAMPAIGNS_FILE):
-        with open(CAMPAIGNS_FILE, 'w', encoding='utf-8') as f:
-            json.dump([], f)
+        default_file = os.path.join(DEFAULT_DATA_DIR, 'campaigns.json')
+        if os.path.exists(default_file):
+            try:
+                import shutil
+                shutil.copy2(default_file, CAMPAIGNS_FILE)
+            except Exception:
+                with open(CAMPAIGNS_FILE, 'w', encoding='utf-8') as f:
+                    json.dump([], f)
+        else:
+            with open(CAMPAIGNS_FILE, 'w', encoding='utf-8') as f:
+                json.dump([], f)
 
 def get_all_campaigns() -> List[Dict[str, Any]]:
     ensure_dirs()
@@ -335,8 +355,11 @@ def execute_campaign_send(campaign_id: str, force_resend: bool = False, demo_mod
             campaign_progress_tracker[campaign_id]["error"] = send_result.get("error")
             campaign_progress_tracker[campaign_id]["results"] = send_result.get("results", [])
             
-    thread = threading.Thread(target=run_sending_thread, daemon=True)
-    thread.start()
+    if is_vercel:
+        run_sending_thread()
+    else:
+        thread = threading.Thread(target=run_sending_thread, daemon=True)
+        thread.start()
     
     return {
         "success": True,

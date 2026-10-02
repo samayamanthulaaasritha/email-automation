@@ -4,14 +4,32 @@ import uuid
 import smtplib
 from typing import List, Dict, Optional
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+DEFAULT_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+is_vercel = bool(os.environ.get('VERCEL') or os.environ.get('AWS_LAMBDA_FUNCTION_NAME'))
+
+if is_vercel:
+    import tempfile
+    import shutil
+    DATA_DIR = os.path.join(tempfile.gettempdir(), 'email_automation_data')
+else:
+    DATA_DIR = DEFAULT_DATA_DIR
+
 SENDERS_FILE = os.path.join(DATA_DIR, 'senders.json')
 
 def ensure_data_dir():
     os.makedirs(DATA_DIR, exist_ok=True)
     if not os.path.exists(SENDERS_FILE):
-        with open(SENDERS_FILE, 'w', encoding='utf-8') as f:
-            json.dump([], f)
+        default_file = os.path.join(DEFAULT_DATA_DIR, 'senders.json')
+        if os.path.exists(default_file):
+            try:
+                import shutil
+                shutil.copy2(default_file, SENDERS_FILE)
+            except Exception:
+                with open(SENDERS_FILE, 'w', encoding='utf-8') as f:
+                    json.dump([], f)
+        else:
+            with open(SENDERS_FILE, 'w', encoding='utf-8') as f:
+                json.dump([], f)
 
 def get_all_senders(include_passwords: bool = False) -> List[Dict]:
     """Retrieve all sender accounts. By default, never includes app_password."""
@@ -20,6 +38,25 @@ def get_all_senders(include_passwords: bool = False) -> List[Dict]:
         with open(SENDERS_FILE, 'r', encoding='utf-8') as f:
             senders = json.load(f)
             
+        # Optional: Auto-load default sender from Vercel environment variables if empty
+        env_email = os.environ.get('EMAIL_ADDRESS', '').strip()
+        env_pwd = (os.environ.get('EMAIL_APP_PASSWORD') or os.environ.get('MAIL_PASSWORD', '')).replace(' ', '').strip()
+        if not senders and env_email and env_pwd:
+            from datetime import datetime
+            default_sender = {
+                "id": "default-env-sender",
+                "display_name": os.environ.get('CLUB_NAME', 'Technical Club'),
+                "email": env_email,
+                "app_password": env_pwd,
+                "created_at": datetime.now().isoformat()
+            }
+            senders.append(default_sender)
+            try:
+                with open(SENDERS_FILE, 'w', encoding='utf-8') as f:
+                    json.dump(senders, f, indent=2)
+            except Exception:
+                pass
+
         if include_passwords:
             return senders
             
