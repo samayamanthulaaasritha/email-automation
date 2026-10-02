@@ -213,8 +213,8 @@ Club Selection Team`
     <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
       
       {/* FLOWCHART HEADER (Exact visual diagram matching user requirements) */}
-      <div className="card" style={{ marginBottom: '24px', background: '#ffffff', border: '1px solid var(--border-light)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid #f1f5f9', paddingBottom: '10px' }}>
+      <div className="card workflow-diagram-card" style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid var(--border-light)', paddingBottom: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <GitBranch size={20} color="var(--primary)" />
             <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
@@ -231,17 +231,17 @@ Club Selection Team`
           <div className={`workflow-node ${currentStep === 1 ? 'current' : currentStep > 1 ? 'completed' : ''}`}>
             {currentStep > 1 ? <Check size={14} /> : '1'} Upload Excel
           </div>
-          <span style={{ color: '#94a3b8', fontWeight: 700 }}>&rarr;</span>
+          <span className="workflow-arrow-separator">&rarr;</span>
 
           <div className={`workflow-node ${currentStep === 2 ? 'current' : currentStep > 2 ? 'completed' : ''}`}>
             {currentStep > 2 ? <Check size={14} /> : '2'} Read Every Row &bull; Check "Selection"
           </div>
-          <span style={{ color: '#94a3b8', fontWeight: 700 }}>&rarr;</span>
+          <span className="workflow-arrow-separator">&rarr;</span>
 
           <div className={`workflow-node ${currentStep === 3 ? 'current' : currentStep > 3 ? 'completed' : ''}`}>
             {currentStep > 3 ? <Check size={14} /> : '3'} Prepare Email (Selected Only)
           </div>
-          <span style={{ color: '#94a3b8', fontWeight: 700 }}>&rarr;</span>
+          <span className="workflow-arrow-separator">&rarr;</span>
 
           <div className={`workflow-node ${currentStep === 4 ? 'current' : ''}`}>
             4 Send from CLUB EMAIL &bull; Live Status
@@ -342,7 +342,7 @@ Club Selection Team`
             </button>
           </div>
 
-          <div style={{ marginTop: '18px', padding: '12px', background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid #e2e8f0', fontSize: '13px', color: 'var(--text-muted)' }}>
+          <div className="info-callout" style={{ marginTop: '18px' }}>
             Tip: A test Excel with Selected, Not Selected, and Pending candidates is ready at <code>backend/sample_data/sample_candidates.xlsx</code>
           </div>
         </div>
@@ -372,7 +372,7 @@ Club Selection Team`
             {/* ↙ BRANCH 1: SELECTED -> PREPARE EMAIL */}
             <div className="branch-panel branch-selected">
               <div className="branch-title">
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#065f46' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--success)' }}>
                   <CheckCircle2 size={20} />
                   ↙ Branch: "Selected"
                 </span>
@@ -380,11 +380,11 @@ Club Selection Team`
                   {validRecipients.length} Candidates
                 </span>
               </div>
-              <p style={{ fontSize: '13px', color: '#065f46', marginBottom: '12px', fontWeight: 600 }}>
+              <p style={{ fontSize: '13px', color: 'var(--success)', marginBottom: '12px', fontWeight: 600 }}>
                 &rarr; Action: Prepare email. These candidates will receive personalized messages.
               </p>
 
-              <div className="table-container" style={{ maxHeight: '280px', overflowY: 'auto', background: '#ffffff' }}>
+              <div className="table-container" style={{ maxHeight: '280px', overflowY: 'auto' }}>
                 <table className="data-table">
                   <thead>
                     <tr>
@@ -411,7 +411,7 @@ Club Selection Team`
             {/* ↘ BRANCH 2: NOT SELECTED -> DO NOTHING */}
             <div className="branch-panel branch-unselected">
               <div className="branch-title">
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#475569' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)' }}>
                   <Ban size={20} />
                   ↘ Branch: "Not Selected"
                 </span>
@@ -419,11 +419,11 @@ Club Selection Team`
                   {ignoredRows.length} Ignored
                 </span>
               </div>
-              <p style={{ fontSize: '13px', color: '#475569', marginBottom: '12px', fontWeight: 600 }}>
+              <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '12px', fontWeight: 600 }}>
                 &rarr; Action: Do nothing. Excluded completely. Zero emails will be sent.
               </p>
 
-              <div className="table-container" style={{ maxHeight: '280px', overflowY: 'auto', background: '#ffffff' }}>
+              <div className="table-container" style={{ maxHeight: '280px', overflowY: 'auto' }}>
                 <table className="data-table">
                   <thead>
                     <tr>
@@ -503,7 +503,7 @@ Club Selection Team`
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px' }}>
             {/* Editor */}
             <div>
-              <div style={{ background: '#f8fafc', padding: '12px', borderRadius: 'var(--radius-md)', border: '1px solid #e2e8f0', marginBottom: '14px' }}>
+              <div className="info-callout" style={{ marginBottom: '14px' }}>
                 <div style={{ fontSize: '13px', fontWeight: 600 }}>
                   SEND FROM CLUB EMAIL: <span style={{ color: 'var(--primary)' }}>{selectedSenderObj?.display_name} &lt;{campaignData.sender_email}&gt;</span>
                 </div>
@@ -523,7 +523,7 @@ Club Selection Team`
                       key={col}
                       type="button"
                       className="btn btn-secondary"
-                      style={{ padding: '3px 8px', fontSize: '11px', background: '#f1f5f9' }}
+                      style={{ padding: '3px 8px', fontSize: '11px' }}
                       onClick={() => handleInsertTag(col)}
                     >
                       +{`{${col}}`}
@@ -561,13 +561,13 @@ Club Selection Team`
                 Personalized Preview
               </div>
               {previewData ? (
-                <div className="email-preview-box" style={{ background: '#f8fafc', height: 'calc(100% - 30px)' }}>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px', marginBottom: '10px' }}>
+                <div className="email-preview-box" style={{ height: 'calc(100% - 30px)' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px', marginBottom: '10px' }}>
                     <div><strong>FROM:</strong> {previewData.from_name} &lt;{previewData.from_email}&gt;</div>
                     <div style={{ marginTop: '2px' }}><strong>TO:</strong> {previewData.to_name} &lt;{previewData.to_email}&gt;</div>
                     <div style={{ marginTop: '2px' }}><strong>SUBJECT:</strong> {previewData.subject}</div>
                   </div>
-                  <div style={{ fontSize: '13px', lineHeight: '1.6', color: '#334155', whiteSpace: 'pre-line' }}>
+                  <div style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-main)', whiteSpace: 'pre-line' }}>
                     {previewData.body}
                   </div>
                 </div>
@@ -633,16 +633,16 @@ Club Selection Team`
 
           {/* Actionable Error Resolution Card if Sending Failed */}
           {campaignData.status === 'failed' && (
-            <div style={{ marginBottom: '20px', padding: '18px 20px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 'var(--radius-md)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#991b1b', fontWeight: 700, fontSize: '15px' }}>
+            <div style={{ marginBottom: '20px', padding: '18px 20px', background: 'var(--danger-light)', border: '1px solid var(--danger-border)', borderRadius: 'var(--radius-md)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--danger)', fontWeight: 700, fontSize: '15px' }}>
                 <AlertTriangle size={20} />
                 Google Authentication Failed (535 BadCredentials)
               </div>
-              <p style={{ color: '#7f1d1d', fontSize: '13px', marginTop: '6px', lineHeight: '1.6' }}>
+              <p style={{ color: 'var(--danger)', fontSize: '13px', marginTop: '6px', lineHeight: '1.6' }}>
                 <strong>Why this happened:</strong> Google rejected the password. Google's mail server strictly blocks your personal Gmail account password from external apps. To deliver real emails into candidate inboxes, you must generate a <strong>Google App Password</strong>.
               </p>
-              <div style={{ margin: '12px 0', padding: '12px 14px', background: '#ffffff', border: '1px solid #fed7aa', borderRadius: 'var(--radius-md)', fontSize: '12px', color: '#334155' }}>
-                <strong style={{ color: '#c2410c' }}>How to fix in 1 minute:</strong>
+              <div style={{ margin: '12px 0', padding: '12px 14px', background: 'var(--bg-card)', border: '1px solid var(--warning-border)', borderRadius: 'var(--radius-md)', fontSize: '12px', color: 'var(--text-main)' }}>
+                <strong style={{ color: 'var(--warning)' }}>How to fix in 1 minute:</strong>
                 <ol style={{ margin: '6px 0 0 16px', padding: 0, lineHeight: '1.6' }}>
                   <li>Ensure 2-Step Verification is turned ON at <a href="https://myaccount.google.com/security" target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', fontWeight: 600 }}>myaccount.google.com/security</a>.</li>
                   <li>Open <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', fontWeight: 700 }}>myaccount.google.com/apppasswords</a>.</li>
@@ -787,7 +787,7 @@ Club Selection Team`
         }
       >
         <div style={{ fontSize: '14px', lineHeight: '1.6' }}>
-          <div style={{ padding: '14px', background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid #e2e8f0', marginBottom: '14px' }}>
+          <div className="info-callout" style={{ marginBottom: '14px' }}>
             <div><strong>CLUB EMAIL:</strong> {campaignData?.sender_email}</div>
             <div><strong>Excel Source:</strong> {campaignData?.excel_filename}</div>
             <div><strong>Selected to Send:</strong> <span style={{ color: 'var(--success)', fontWeight: 700 }}>{validRecipients.length} Candidates</span></div>

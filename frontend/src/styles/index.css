@@ -50,6 +50,48 @@
   --transition-slow: 0.35s ease;
 }
 
+[data-theme="dark"] {
+  /* Color Palette - Dark Mode */
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: rgba(99, 102, 241, 0.16);
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  
+  --secondary: #38bdf8;
+  --secondary-gradient: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+
+  --success: #34d399;
+  --success-light: rgba(16, 185, 129, 0.16);
+  --success-border: rgba(52, 211, 153, 0.35);
+  
+  --warning: #fbbf24;
+  --warning-light: rgba(245, 158, 11, 0.16);
+  --warning-border: rgba(251, 191, 36, 0.35);
+
+  --danger: #f87171;
+  --danger-light: rgba(239, 68, 68, 0.16);
+  --danger-border: rgba(248, 113, 113, 0.35);
+
+  --bg-main: #0b0f19;
+  --bg-sidebar: #070a13;
+  --bg-card: #131b2e;
+  --bg-card-hover: #1e293b;
+  --bg-input: #0f172a;
+
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --text-inverse: #ffffff;
+
+  --border-light: #1e293b;
+  --border-focus: #6366f1;
+
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.45);
+  --shadow-xl: 0 20px 30px -5px rgba(0, 0, 0, 0.75), 0 8px 12px -6px rgba(0, 0, 0, 0.55);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -63,6 +105,7 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* App Layout */
@@ -209,7 +252,7 @@ body {
 /* Top Header */
 .top-header {
   height: 68px;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   border-bottom: 1px solid var(--border-light);
   padding: 0 32px;
   display: flex;
@@ -218,6 +261,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 30;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .header-title h1 {
@@ -230,7 +274,46 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-light);
+  background: var(--bg-card-hover);
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-icon {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle-btn:hover .sun-icon {
+  transform: rotate(45deg) scale(1.15);
+  color: #f59e0b;
+}
+
+.theme-toggle-btn:hover .moon-icon {
+  transform: rotate(-25deg) scale(1.15);
+  color: #818cf8;
 }
 
 .status-indicator {
@@ -241,7 +324,8 @@ body {
   font-weight: 500;
   padding: 6px 12px;
   border-radius: var(--radius-full);
-  background: #f1f5f9;
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-light);
   color: var(--text-muted);
 }
 
@@ -301,7 +385,7 @@ body {
 }
 
 .metric-card {
-  background: #ffffff;
+  background: var(--bg-card);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   padding: 20px;
@@ -311,6 +395,7 @@ body {
   box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
+  transition: all var(--transition-fast);
 }
 
 .metric-card::before {
@@ -358,7 +443,7 @@ body {
 .metric-card.success .metric-icon-box { background: var(--success-light); color: var(--success); }
 .metric-card.danger .metric-icon-box { background: var(--danger-light); color: var(--danger); }
 .metric-card.warning .metric-icon-box { background: var(--warning-light); color: var(--warning); }
-.metric-card.info .metric-icon-box { background: #e0f2fe; color: var(--secondary); }
+.metric-card.info .metric-icon-box { background: rgba(14, 165, 233, 0.15); color: var(--secondary); }
 
 /* Buttons */
 .btn {
@@ -386,14 +471,15 @@ body {
 }
 
 .btn-secondary {
-  background: #ffffff;
+  background: var(--bg-card);
   color: var(--text-main);
   border: 1px solid var(--border-light);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: var(--bg-card-hover);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .btn-danger {
@@ -427,7 +513,7 @@ body {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 32px;
-  background: #ffffff;
+  background: var(--bg-card);
   padding: 18px 24px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
@@ -450,7 +536,7 @@ body {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #f1f5f9;
+  background: var(--bg-card-hover);
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -482,18 +568,18 @@ body {
 .wizard-divider {
   flex: 1;
   height: 2px;
-  background: #e2e8f0;
+  background: var(--border-light);
   margin: 0 8px;
   min-width: 20px;
 }
 
 /* Drag and Drop Uploader */
 .dropzone {
-  border: 2px dashed #cbd5e1;
+  border: 2px dashed var(--border-light);
   border-radius: var(--radius-lg);
   padding: 48px 24px;
   text-align: center;
-  background: #f8fafc;
+  background: var(--bg-card-hover);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
@@ -514,7 +600,7 @@ body {
   overflow-x: auto;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  background: #ffffff;
+  background: var(--bg-card);
 }
 
 .data-table {
@@ -525,7 +611,7 @@ body {
 }
 
 .data-table th {
-  background: #f8fafc;
+  background: var(--bg-card-hover);
   color: var(--text-muted);
   font-weight: 600;
   padding: 12px 16px;
@@ -542,7 +628,7 @@ body {
 }
 
 .data-table tr:hover td {
-  background-color: #f8fafc;
+  background-color: var(--bg-card-hover);
 }
 
 /* Status Badges */
@@ -559,26 +645,26 @@ body {
 
 .badge-success {
   background: var(--success-light);
-  color: #065f46;
+  color: var(--success);
   border: 1px solid var(--success-border);
 }
 
 .badge-danger {
   background: var(--danger-light);
-  color: #991b1b;
+  color: var(--danger);
   border: 1px solid var(--danger-border);
 }
 
 .badge-warning {
   background: var(--warning-light);
-  color: #92400e;
+  color: var(--warning);
   border: 1px solid var(--warning-border);
 }
 
 .badge-neutral {
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-card-hover);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
 }
 
 .badge-primary {
@@ -627,7 +713,7 @@ body {
 .progress-container {
   width: 100%;
   height: 10px;
-  background: #e2e8f0;
+  background: var(--border-light);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -646,8 +732,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -656,7 +742,8 @@ body {
 }
 
 .modal-content {
-  background: #ffffff;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-xl);
   max-width: 550px;
   width: 100%;
@@ -682,11 +769,12 @@ body {
   padding: 24px;
   max-height: 75vh;
   overflow-y: auto;
+  color: var(--text-main);
 }
 
 .modal-footer {
   padding: 16px 24px;
-  background: #f8fafc;
+  background: var(--bg-card-hover);
   border-top: 1px solid var(--border-light);
   display: flex;
   align-items: center;
@@ -711,7 +799,8 @@ body {
   gap: 12px;
   padding: 14px 18px;
   border-radius: var(--radius-md);
-  background: #ffffff;
+  background: var(--bg-card);
+  color: var(--text-main);
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-light);
   font-size: 14px;
@@ -732,7 +821,7 @@ body {
 
 /* Email Preview Card */
 .email-preview-box {
-  background: #ffffff;
+  background: var(--bg-card);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   padding: 20px;
@@ -766,18 +855,19 @@ body {
 .email-preview-body {
   font-size: 14px;
   line-height: 1.7;
-  color: #334155;
+  color: var(--text-main);
   white-space: pre-line;
 }
 
 /* Workflow Flowchart Styles */
 .workflow-diagram-card {
-  background: #ffffff;
+  background: var(--bg-card);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   padding: 20px 24px;
   margin-bottom: 24px;
   box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
 }
 
 .workflow-header {
@@ -805,7 +895,7 @@ body {
   border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 600;
-  background: #f8fafc;
+  background: var(--bg-card-hover);
   border: 1px solid var(--border-light);
   color: var(--text-muted);
   transition: all var(--transition-fast);
@@ -813,7 +903,7 @@ body {
 
 .workflow-node.current {
   background: var(--primary-light);
-  border-color: #c7d2fe;
+  border-color: var(--border-focus);
   color: var(--primary);
   box-shadow: 0 0 12px rgba(79, 70, 229, 0.15);
   font-weight: 700;
@@ -822,11 +912,11 @@ body {
 .workflow-node.completed {
   background: var(--success-light);
   border-color: var(--success-border);
-  color: #065f46;
+  color: var(--success);
 }
 
 .workflow-arrow-separator {
-  color: #94a3b8;
+  color: var(--text-subtle);
   font-weight: bold;
 }
 
@@ -847,16 +937,17 @@ body {
   border-radius: var(--radius-lg);
   padding: 20px;
   border: 2px solid transparent;
+  transition: all var(--transition-fast);
 }
 
 .branch-selected {
-  background: #f0fdf4;
-  border-color: #86efac;
+  background: var(--success-light);
+  border-color: var(--success-border);
 }
 
 .branch-unselected {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: var(--bg-card-hover);
+  border-color: var(--border-light);
 }
 
 .branch-title {
@@ -867,4 +958,65 @@ body {
   font-size: 15px;
   font-weight: 700;
 }
+
+/* Callout Box Utility */
+.info-callout {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.5;
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-light);
+  color: var(--text-muted);
+}
+
+.info-callout-primary {
+  background: var(--primary-light);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: var(--text-main);
+}
+
+/* Dark mode select dropdown option styling */
+[data-theme="dark"] select option {
+  background-color: #111827;
+  color: #f8fafc;
+}
+
+/* Smooth transitions for theme switching */
+.card,
+.top-header,
+.sidebar,
+.table-container,
+.dropzone,
+.email-preview-box,
+.modal-content,
+.form-input,
+.form-select,
+.form-textarea,
+.status-indicator,
+.workflow-diagram-card,
+.workflow-node,
+.branch-panel {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Custom modern scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-subtle);
+}
+
 

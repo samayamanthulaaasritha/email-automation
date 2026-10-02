@@ -174,10 +174,10 @@ export default function Settings({ onAddToast }) {
               onChange={(e) => setAppPassword(e.target.value)}
               required
             />
-            <div style={{ marginTop: '8px', padding: '10px 12px', background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 'var(--radius-md)', fontSize: '12px', color: '#1e40af', lineHeight: '1.5' }}>
+            <div className="info-callout info-callout-primary" style={{ marginTop: '8px', fontSize: '12px' }}>
               <strong>Why a Google App Password is required for real emails:</strong> Google SMTP strictly blocks regular Gmail account passwords. To ensure emails physically land in candidate inboxes:
               <ol style={{ margin: '6px 0 0 16px', padding: 0 }}>
-                <li>Open <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noreferrer" style={{ color: '#1d4ed8', fontWeight: 700 }}>myaccount.google.com/apppasswords</a> (ensure 2-Step Verification is turned ON).</li>
+                <li>Open <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', fontWeight: 700 }}>myaccount.google.com/apppasswords</a> (ensure 2-Step Verification is turned ON).</li>
                 <li>Type App name <em>"Email Automation"</em> and click <strong>Create</strong>.</li>
                 <li>Copy the 16-letter code, paste it above, and click <strong>Verify Mail Password</strong>.</li>
               </ol>
@@ -272,7 +272,7 @@ export default function Settings({ onAddToast }) {
                     <td style={{ textAlign: 'right' }}>
                       <button
                         className="btn btn-secondary"
-                        style={{ padding: '4px 8px', color: 'var(--danger)', borderColor: '#fecaca', fontSize: '12px' }}
+                        style={{ padding: '4px 8px', color: 'var(--danger)', borderColor: 'var(--danger-border)', fontSize: '12px' }}
                         onClick={() => handleDeleteSender(s.id, s.display_name)}
                         disabled={isDeleting === s.id}
                       >

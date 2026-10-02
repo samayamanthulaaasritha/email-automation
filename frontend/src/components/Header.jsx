@@ -1,7 +1,9 @@
 import React from 'react';
-import { ShieldCheck, HelpCircle } from 'lucide-react';
+import { ShieldCheck, Sun, Moon } from 'lucide-react';
 
-export default function Header({ pageTitle, backendConnected, onOpenHelp }) {
+export default function Header({ pageTitle, backendConnected, theme, onToggleTheme }) {
+  const isDark = theme === 'dark';
+
   return (
     <header className="top-header">
       <div className="header-title">
@@ -9,14 +11,34 @@ export default function Header({ pageTitle, backendConnected, onOpenHelp }) {
       </div>
 
       <div className="header-actions">
+        {/* Light / Dark Mode Toggle */}
+        <button 
+          className="theme-toggle-btn"
+          onClick={onToggleTheme}
+          title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          aria-label="Toggle Theme"
+        >
+          {isDark ? (
+            <>
+              <Sun size={15} className="theme-toggle-icon sun-icon" />
+              <span>Light Mode</span>
+            </>
+          ) : (
+            <>
+              <Moon size={15} className="theme-toggle-icon moon-icon" />
+              <span>Dark Mode</span>
+            </>
+          )}
+        </button>
+
         <div className={`status-indicator ${backendConnected ? 'connected' : ''}`}>
           <span className="status-dot"></span>
           <span>{backendConnected ? 'Backend Connected' : 'Connecting to Server...'}</span>
         </div>
 
-        <div className="status-indicator" style={{ background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-          <ShieldCheck size={14} color="#4f46e5" />
-          <span style={{ fontSize: '11px', color: '#475569' }}>Zero Credential Leakage</span>
+        <div className="status-indicator">
+          <ShieldCheck size={14} color="var(--primary)" />
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Zero Credential Leakage</span>
         </div>
       </div>
     </header>

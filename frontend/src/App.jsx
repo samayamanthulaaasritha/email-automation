@@ -14,6 +14,22 @@ export default function App() {
   const [backendConnected, setBackendConnected] = useState(false);
   const [toasts, setToasts] = useState([]);
 
+  // Light / Dark Mode Theme
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('app-theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('app-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   // Toast notification helper
   const addToast = (message, type = 'info') => {
     const id = Date.now() + Math.random().toString();
@@ -69,6 +85,8 @@ export default function App() {
         <Header 
           pageTitle={getPageTitle()} 
           backendConnected={backendConnected} 
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
 
         <main className="page-content">
