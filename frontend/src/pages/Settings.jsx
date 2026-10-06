@@ -25,14 +25,18 @@ export default function Settings({ onAddToast }) {
   const [saving, setSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(null);
 
+  const [serverError, setServerError] = useState(null);
+
   const fetchSenders = async () => {
     try {
       setLoading(true);
+      setServerError(null);
       const res = await api.getSenders();
       if (res.success) {
         setSenders(res.senders);
       }
     } catch (err) {
+      setServerError(err.message);
       onAddToast('Failed to load sender accounts: ' + err.message, 'error');
     } finally {
       setLoading(false);
@@ -111,6 +115,33 @@ export default function Settings({ onAddToast }) {
           Add and manage your Club Gmail Accounts using your Mail Password.
         </p>
       </div>
+
+      {serverError && (
+        <div style={{
+          background: 'rgba(239, 68, 68, 0.08)',
+          border: '1px solid rgba(239, 68, 68, 0.3)',
+          borderRadius: '10px',
+          padding: '12px 16px',
+          marginBottom: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          color: 'var(--danger, #ef4444)'
+        }}>
+          <AlertCircle size={20} />
+          <div style={{ flex: 1, fontSize: '13px', lineHeight: '1.4' }}>
+            <strong>Backend Connection Offline:</strong> {serverError}. Please make sure the Python Flask server is running on port 5000 (via <code>npm run dev</code> or <code>start.bat</code>).
+          </div>
+          <button 
+            type="button"
+            onClick={fetchSenders}
+            className="btn-secondary"
+            style={{ padding: '4px 12px', fontSize: '12px', cursor: 'pointer' }}
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {/* Form: Add Club Sender Mail */}
       <div className="card" style={{ marginBottom: '28px' }}>

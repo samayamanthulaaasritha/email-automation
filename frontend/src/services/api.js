@@ -10,122 +10,122 @@ async function handleResponse(response) {
     return data;
   }
   if (!response.ok) {
+    if (response.status === 502 || response.status === 503 || response.status === 504) {
+      throw new Error('Backend server is offline on port 5000. Please start the Python backend.');
+    }
     const text = await response.text();
     throw new Error(text || 'Network error occurred');
   }
   return response;
 }
 
+async function safeFetch(url, options) {
+  try {
+    const res = await fetch(url, options);
+    return await handleResponse(res);
+  } catch (err) {
+    if (err.name === 'TypeError' && err.message.toLowerCase().includes('fetch')) {
+      throw new Error('Cannot connect to backend server. Please make sure the Flask backend is running on port 5000.');
+    }
+    throw err;
+  }
+}
+
 export const api = {
   // Health
   checkHealth: async () => {
-    const res = await fetch(`${API_BASE}/health`);
-    return handleResponse(res);
+    return safeFetch(`${API_BASE}/health`);
   },
 
   // Senders
   getSenders: async () => {
-    const res = await fetch(`${API_BASE}/sender-accounts`);
-    return handleResponse(res);
+    return safeFetch(`${API_BASE}/sender-accounts`);
   },
   createSender: async (senderData) => {
-    const res = await fetch(`${API_BASE}/sender-accounts`, {
+    return safeFetch(`${API_BASE}/sender-accounts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(senderData),
     });
-    return handleResponse(res);
   },
   testSender: async (testData) => {
-    const res = await fetch(`${API_BASE}/sender-accounts/test`, {
+    return safeFetch(`${API_BASE}/sender-accounts/test`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(testData),
     });
-    return handleResponse(res);
   },
   deleteSender: async (senderId) => {
-    const res = await fetch(`${API_BASE}/sender-accounts/${senderId}`, {
+    return safeFetch(`${API_BASE}/sender-accounts/${senderId}`, {
       method: 'DELETE',
     });
-    return handleResponse(res);
   },
 
   // Campaigns
   getCampaigns: async () => {
-    const res = await fetch(`${API_BASE}/campaigns`);
-    return handleResponse(res);
+    return safeFetch(`${API_BASE}/campaigns`);
   },
   getCampaign: async (campaignId) => {
-    const res = await fetch(`${API_BASE}/campaigns/${campaignId}`);
-    return handleResponse(res);
+    return safeFetch(`${API_BASE}/campaigns/${campaignId}`);
   },
   createCampaign: async (data) => {
-    const res = await fetch(`${API_BASE}/campaigns`, {
+    return safeFetch(`${API_BASE}/campaigns`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    return handleResponse(res);
   },
   deleteCampaign: async (campaignId) => {
-    const res = await fetch(`${API_BASE}/campaigns/${campaignId}`, {
+    return safeFetch(`${API_BASE}/campaigns/${campaignId}`, {
       method: 'DELETE',
     });
-    return handleResponse(res);
   },
 
   // Excel Upload
   uploadExcel: async (campaignId, file) => {
     const formData = new FormData();
     formData.append('file', file);
-    const res = await fetch(`${API_BASE}/campaigns/${campaignId}/upload`, {
+    return safeFetch(`${API_BASE}/campaigns/${campaignId}/upload`, {
       method: 'POST',
       body: formData,
     });
-    return handleResponse(res);
   },
 
   // Column Mapping
   mapColumns: async (campaignId, mapping) => {
-    const res = await fetch(`${API_BASE}/campaigns/${campaignId}/map-columns`, {
+    return safeFetch(`${API_BASE}/campaigns/${campaignId}/map-columns`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(mapping),
     });
-    return handleResponse(res);
   },
 
   // Content
   saveContent: async (campaignId, content) => {
-    const res = await fetch(`${API_BASE}/campaigns/${campaignId}/content`, {
+    return safeFetch(`${API_BASE}/campaigns/${campaignId}/content`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(content),
     });
-    return handleResponse(res);
   },
 
   // Preview
   getPreview: async (campaignId, index = 0) => {
-    const res = await fetch(`${API_BASE}/campaigns/${campaignId}/preview?index=${index}`);
-    return handleResponse(res);
+    return safeFetch(`${API_BASE}/campaigns/${campaignId}/preview?index=${index}`);
   },
 
   // Send
   sendCampaign: async (campaignId, forceResend = false, demoMode = false) => {
-    const res = await fetch(`${API_BASE}/campaigns/${campaignId}/send`, {
+    return safeFetch(`${API_BASE}/campaigns/${campaignId}/send`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ force_resend: forceResend, demo_mode: demoMode }),
     });
-    return handleResponse(res);
   },
 
   // Progress
   getProgress: async (campaignId) => {
-    const res = await fetch(`${API_BASE}/campaigns/${campaignId}/progress`);
-    return handleResponse(res);
+    return safeFetch(`${API_BASE}/campaigns/${campaignId}/progress`);
   },
 
   // Report Download
@@ -135,7 +135,6 @@ export const api = {
 
   // Dashboard Stats
   getDashboardStats: async () => {
-    const res = await fetch(`${API_BASE}/dashboard/stats`);
-    return handleResponse(res);
+    return safeFetch(`${API_BASE}/dashboard/stats`);
   }
 };

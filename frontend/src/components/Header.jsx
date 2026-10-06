@@ -31,9 +31,9 @@ export default function Header({ pageTitle, backendConnected, theme, onToggleThe
           )}
         </button>
 
-        <div className={`status-indicator ${backendConnected ? 'connected' : ''}`}>
+        <div className={`status-indicator ${backendConnected ? 'connected' : 'disconnected'}`}>
           <span className="status-dot"></span>
-          <span>{backendConnected ? 'Backend Connected' : 'Connecting to Server...'}</span>
+          <span>{backendConnected ? 'Backend Connected' : 'Backend Offline (Port 5000)'}</span>
         </div>
 
         <div className="status-indicator">

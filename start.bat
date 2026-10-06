@@ -9,8 +9,16 @@ if exist "%USERPROFILE%\.nodejs\node-v20.18.0-win-x64" (
     set "PATH=%USERPROFILE%\.nodejs\node-v20.18.0-win-x64;%PATH%"
 )
 
+:: Find Python executable
+set "PY_CMD=python"
+if exist "%~dp0backend\venv\Scripts\python.exe" (
+    set "PY_CMD=%~dp0backend\venv\Scripts\python.exe"
+) else if exist "%~dp0venv\Scripts\python.exe" (
+    set "PY_CMD=%~dp0venv\Scripts\python.exe"
+)
+
 echo [1/3] Starting Python Flask Backend on port 5000...
-start "MailPilot Backend" cmd /k "cd /d %~dp0backend && .\venv\Scripts\python.exe app.py"
+start "MailPilot Backend" cmd /k "cd /d %~dp0backend && "%PY_CMD%" app.py"
 
 echo [2/3] Starting Vite React Frontend on port 5173...
 start "MailPilot Frontend" cmd /k "cd /d %~dp0frontend && npm run dev"

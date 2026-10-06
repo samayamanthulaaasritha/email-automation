@@ -116,12 +116,12 @@ def test_gmail_credentials(email: str, app_password: str) -> Dict:
     except smtplib.SMTPAuthenticationError:
         return {
             "success": False,
-            "message": "Google SMTP rejected this password (535 BadCredentials). Google strictly blocks regular account passwords on SMTP. You must generate a Google App Password from myaccount.google.com/apppasswords to send real emails."
+            "message": "Unable to authenticate with this Gmail account: Google SMTP rejected this password (535 BadCredentials). Google strictly blocks regular account passwords on SMTP. You must generate a Google App Password from myaccount.google.com/apppasswords to send real emails."
         }
     except Exception as e:
         return {
             "success": False,
-            "message": f"SMTP connection error: {str(e)}"
+            "message": f"Unable to authenticate with this Gmail account: SMTP connection error: {str(e)}"
         }
 
 def add_sender(display_name: str, email: str, app_password: str) -> Dict:

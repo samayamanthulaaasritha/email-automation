@@ -341,6 +341,16 @@ body {
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
 }
 
+.status-indicator.disconnected {
+  color: var(--danger, #ef4444);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.status-indicator.disconnected .status-dot {
+  background-color: var(--danger, #ef4444);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+}
+
 .page-content {
   padding: 32px;
   flex: 1;
